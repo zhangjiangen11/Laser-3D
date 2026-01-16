@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+.github export-ignore
+/assets export-ignore
+/screenshots export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+gp.bat export-ignore
+LICENSE.md export-ignore
+README.md export-ignore
