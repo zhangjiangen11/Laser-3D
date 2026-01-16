@@ -38,8 +38,13 @@ var _cylinder_material: StandardMaterial3D = StandardMaterial3D.new()
 var _editor_preview_mesh_instance: MeshInstance3D = MeshInstance3D.new()
 var _editor_preview_cylinder_mesh: CylinderMesh = CylinderMesh.new()
 var _editor_preview_cylinder_material: StandardMaterial3D = StandardMaterial3D.new()
-var _nodes_ready := false
-var _preview_nodes_ready := false
+var _nodes_ready: bool = false
+var _preview_nodes_ready: bool = false
+var _current_collider: Object:
+	set(value):
+		if value and _current_collider and value != _current_collider:
+			collider_changed.emit(_current_collider, value)
+		_current_collider = value
 
 
 # --------------------------------------------------------------
@@ -54,6 +59,10 @@ var _preview_nodes_ready := false
 ## collider_rid: RID
 ## collider_shape: int[/code]
 signal collision_detected(collision_result: LaserResult)
+
+
+## Emitted when the collider is changed. Useful when you need to know if the collider has moved out of the laser beam's focus.
+signal collider_changed(old_collider: Object, new_collider: Object)
 
 
 # --------------------------------------------------------------
@@ -339,6 +348,8 @@ func _runtime() -> void:
 
 	
 	if is_colliding and not laser_exclude_from_the_results_report.has(collider):
+		_current_collider = collider
+
 		var collision_result: LaserResult = LaserResult.new(
 			collider,
 			_ray_cast.get_collision_point(),
