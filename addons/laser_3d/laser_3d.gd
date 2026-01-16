@@ -50,7 +50,7 @@ var _nodes_ready: bool = false
 var _preview_nodes_ready: bool = false
 var _current_collider: Object:
 	set(value):
-		if value and _current_collider and value != _current_collider:
+		if value != _current_collider:
 			collider_changed.emit(_current_collider, value)
 		_current_collider = value
 
@@ -355,11 +355,10 @@ func _runtime() -> void:
 
 	var collider: Object = _ray_cast.get_collider()
 	var is_colliding: bool = laser_active and _ray_cast.is_colliding() and collider
-
+	
+	_current_collider = collider
 	
 	if is_colliding and not laser_exclude_from_the_results_report.has(collider):
-		_current_collider = collider
-
 		var collision_result: LaserResult = LaserResult.new(
 			collider,
 			_ray_cast.get_collision_point(),
@@ -506,6 +505,7 @@ func _cylinder_material_default_values() -> void:
 	_cylinder_material.emission = laser_color
 	_cylinder_material.emission_enabled = true
 	_cylinder_material.emission_energy_multiplier = laser_emission
+	_cylinder_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 
 	if Engine.is_editor_hint():
 		await _ensure_preview_ready()
@@ -513,3 +513,4 @@ func _cylinder_material_default_values() -> void:
 		_editor_preview_cylinder_material.emission = laser_color
 		_editor_preview_cylinder_material.emission_enabled = true
 		_editor_preview_cylinder_material.emission_energy_multiplier = laser_emission
+		_editor_preview_cylinder_material.cull_mode = BaseMaterial3D.CULL_DISABLED
