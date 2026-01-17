@@ -343,8 +343,14 @@ func get_collision_mask_value(layer_number: int) -> bool:
 	return _ray_cast.get_collision_mask_value(layer_number)
 
 
+## Returns laser is visible.
 func is_laser_visible() -> bool:
 	return _mesh_instance.visible
+
+
+## Returns whether any object is intersecting with the ray's vector (considering the vector length).
+func is_colliding() -> bool:
+	return _ray_cast.is_colliding()
 
 	
 # --------------------------------------------------------------
