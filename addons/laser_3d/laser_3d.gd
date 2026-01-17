@@ -53,7 +53,13 @@ var _current_collider: Object:
 		if value != _current_collider:
 			collider_changed.emit(_current_collider, value)
 		_current_collider = value
+var _mesh_visible: bool = false:
+	set(value):
+		if value != _mesh_visible:
+			laser_visible_change.emit(value, get_collider())
 
+		_mesh_visible = value
+		_mesh_instance.visible = _mesh_visible
 
 enum laser_visible {LASER_ALWAYS_VISIBLE, LASER_VISIBLE_ON_COLLIDE, LASER_VISIBLE_OFF}
 
@@ -75,6 +81,10 @@ signal collision_detected(collision_result: LaserResult)
 signal collider_changed(old_collider: Object, new_collider: Object)
 
 
+## Emitted every time the laser beam becomes visible or invisible.
+signal laser_visible_change(laser_visible: bool, collider: Object)
+
+
 # --------------------------------------------------------------
 # EXPORTS
 # --------------------------------------------------------------
@@ -87,7 +97,7 @@ signal collider_changed(old_collider: Object, new_collider: Object)
 @export var laser_type_visible: laser_visible = LASER_ALWAYS_VISIBLE:
 	set(value):
 		laser_type_visible = value
-		_mesh_instance.visible = _visual_handle()
+		_mesh_visible = _visual_handle()
 
 
 ## Offsets the laser forward direction.[br]
@@ -345,14 +355,14 @@ func get_collision_mask_value(layer_number: int) -> bool:
 
 ## Returns laser is visible.
 func is_laser_visible() -> bool:
-	return _mesh_instance.visible
+	return _mesh_visible
 
 
 ## Returns whether any object is intersecting with the ray's vector (considering the vector length).
 func is_colliding() -> bool:
 	return _ray_cast.is_colliding()
 
-	
+
 # --------------------------------------------------------------
 # PRIVATE METHODS
 # --------------------------------------------------------------
@@ -380,7 +390,7 @@ func _runtime() -> void:
 
 		collision_detected.emit(collision_result)
 
-	_mesh_instance.visible = _visual_handle()
+	_mesh_visible = _visual_handle()
 
 
 func _editor_preview() -> void:
@@ -492,7 +502,7 @@ func _mesh_instance_default_values() -> void:
 	await _ensure_ready()
 	_mesh_instance.name = "mesh_instance"
 	_mesh_instance.mesh = _cylinder_mesh
-	_mesh_instance.visible = _visual_handle()
+	_mesh_visible = _visual_handle()
 	_mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	_mesh_instance.rotation_degrees.x = -90
