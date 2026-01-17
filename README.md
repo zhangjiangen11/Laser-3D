@@ -178,6 +178,10 @@ Laser3D provides a **live editor preview**:
 
 ---
 
+Watch the video: https://youtu.be/8Nyr0VzOIPc
+
+---
+
 ## Compatibility
 
 - ✅ Godot **4.5**
