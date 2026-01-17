@@ -103,9 +103,13 @@ func _on_laser_hit(result: LaserResult) -> void:
 
 ## Signals
 
-### `collision_detected(collision_result: LaserResult)`
+| Signal Name                                                    | Description                                                                                                                 |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `collision_detected(collision_result: LaserResult)`            | Emitted when the laser hits a valid object during runtime.                                                                  |
+| `collider_changed(old_collider: Object, new_collider: Object)` | Emitted when the collider is changed. Useful when you need to know if the collider has moved out of the laser beam's focus. |
+| `laser_visible_change(laser_visible: bool, collider: Object)`  | Emitted every time the laser beam becomes visible or invisible.                                                             |
 
-Emitted when the laser hits a valid object during runtime.
+---
 
 **LaserResult contains:**
 
@@ -137,15 +141,17 @@ Emitted when the laser hits a valid object during runtime.
 
 ### Collision Query
 
-| Method                            | Description                 |
-| --------------------------------- | --------------------------- |
-| `get_collider()`                  | Returns collided object     |
-| `get_collision_point()`           | Returns hit position        |
-| `get_collision_normal()`          | Returns hit normal          |
-| `get_collider_rid()`              | Returns collider RID        |
-| `get_collider_shape()`            | Returns shape index         |
-| `get_collision_face_index()`      | Returns face index          |
-| `get_collision_mask_value(layer)` | Checks collision mask layer |
+| Method                            | Description                                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `get_collider()`                  | Returns collided object                                                                          |
+| `get_collision_point()`           | Returns hit position                                                                             |
+| `get_collision_normal()`          | Returns hit normal                                                                               |
+| `get_collider_rid()`              | Returns collider RID                                                                             |
+| `get_collider_shape()`            | Returns shape index                                                                              |
+| `get_collision_face_index()`      | Returns face index                                                                               |
+| `get_collision_mask_value(layer)` | Checks collision mask layer                                                                      |
+| `is_colliding()`                  | Returns whether any object is intersecting with the ray's vector (considering the vector length) |
+| `is_laser_visible()`              | Returns laser is visible                                                                         |
 
 ---
 
